@@ -5,18 +5,19 @@ import androidx.annotation.Nullable;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.ViewModel;
 
-import com.cleanup.todoc.repositories.ProjectDataRepository;
-import com.cleanup.todoc.repositories.TaskDataRepository;
 import com.cleanup.todoc.model.Project;
 import com.cleanup.todoc.model.Task;
+import com.cleanup.todoc.repositories.TaskDataRepository;
 
 import java.util.List;
 import java.util.concurrent.Executor;
 
+//import com.cleanup.todoc.repositories.ProjectDataRepository;
+
 public class TaskViewModel extends ViewModel {
 
     private final TaskDataRepository taskDataSource;
-    private final ProjectDataRepository projectDataSource;
+   // private final ProjectDataRepository projectDataSource;
     private final Executor mExecutor;
 
     @Nullable
@@ -25,12 +26,13 @@ public class TaskViewModel extends ViewModel {
     private LiveData<List<Project>> allProjects;
 
 
-    public TaskViewModel(TaskDataRepository taskDataSource, ProjectDataRepository projectDataSource, Executor executor) {
+    public TaskViewModel(TaskDataRepository taskDataSource, Executor executor) {
         this.taskDataSource = taskDataSource;
-        this.projectDataSource = projectDataSource;
+   //     this.projectDataSource = projectDataSource;
         mExecutor = executor;
     }
 
+/**
     //-------------------
     //FOR PROJECTS
     //-------------------
@@ -54,7 +56,7 @@ public class TaskViewModel extends ViewModel {
             }
         });
     }
-
+*/
     //--------------------
     //FOR TASKS
     //-------------------
@@ -100,9 +102,10 @@ public class TaskViewModel extends ViewModel {
             }
         });
     }
-
+/**
     public LiveData<Project> getProject (final Task task) {
         return projectDataSource.getProjectById(task.getProjectId());
     }
+ */
 }
 

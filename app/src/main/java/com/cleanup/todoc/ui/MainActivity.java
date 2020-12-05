@@ -27,7 +27,6 @@ import com.cleanup.todoc.model.Project;
 import com.cleanup.todoc.model.Task;
 import com.cleanup.todoc.viewmodel.TaskViewModel;
 
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -46,7 +45,7 @@ public class MainActivity extends AppCompatActivity implements TasksAdapter.Dele
     /**
      * List of all projects available in the application
      */
-    private List<Project> allProjects = new ArrayList<>();
+    private Project[] allProjects = Project.getAllProjects();
 
     /**
      * List of all current tasks of the application
@@ -71,30 +70,7 @@ public class MainActivity extends AppCompatActivity implements TasksAdapter.Dele
     @Nullable
     public AlertDialog dialog = null;
 
-    /**
-     * EditText that allows user to set the name of a task
-     *
-     * @Nullable private EditText dialogEditText = null;
-     * <p>
-     * /**
-     * Spinner that allows the user to associate a project to a task
-     * @Nullable private Spinner dialogSpinner = null;
-     * <p>
-     * /**
-     * The RecyclerView which displays the list of tasks
-     * <p>
-     * // Suppress warning is safe because variable is initialized in onCreate
-     * @SuppressWarnings("NullableProblems")
-     * @NonNull private RecyclerView listTasks;
-     * <p>
-     * /**
-     * The TextView displaying the empty state
-     * <p>
-     * // Suppress warning is safe because variable is initialized in onCreate
-     * @SuppressWarnings("NullableProblems")
-     * @NonNull private TextView lblNoTasks;
-     * <p>
-     * /**
+     /**
      * The Viewmodel
      */
     private TaskViewModel mTaskViewModel;
@@ -108,10 +84,6 @@ public class MainActivity extends AppCompatActivity implements TasksAdapter.Dele
 
         configureViewModel();
 
-        /**
-         listTasks = findViewById(R.id.list_tasks);
-         lblNoTasks = findViewById(R.id.lbl_no_task);
-         */
         mTaskViewModel.getAllTasks().observe(this, new Observer<List<Task>>() {
             @Override
             public void onChanged(List<Task> tasks) {
@@ -123,18 +95,7 @@ public class MainActivity extends AppCompatActivity implements TasksAdapter.Dele
             }
         });
 
-        mTaskViewModel.getAllProjects().observe(this, new Observer<List<Project>>() {
-            @Override
-            public void onChanged(List<Project> projects) {
-                if (projects != null) {
-                    setListProjects(projects);
-                    adapter.updateProjects(projects);
-                }
-            }
-        });
-
         configureRecyclerView();
-
 
         binding.fabAddTask.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -153,7 +114,6 @@ public class MainActivity extends AppCompatActivity implements TasksAdapter.Dele
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
-
         if (id == R.id.filter_alphabetical) {
             sortMethod = SortMethod.ALPHABETICAL;
         } else if (id == R.id.filter_alphabetical_inverted) {
@@ -163,7 +123,6 @@ public class MainActivity extends AppCompatActivity implements TasksAdapter.Dele
         } else if (id == R.id.filter_recent_first) {
             sortMethod = SortMethod.RECENT_FIRST;
         }
-
         updateTasks(allTasks);
         return super.onOptionsItemSelected(item);
     }
@@ -171,17 +130,10 @@ public class MainActivity extends AppCompatActivity implements TasksAdapter.Dele
     @Override
     public void onDeleteTask(Task task) {
         mTaskViewModel.deleteTask(task);
-        allTasks.remove(task);
-        updateTasks(allTasks);
-        adapter.notifyDataSetChanged();
     }
 
     private void setListTasks(List<Task> tasks) {
         this.allTasks = tasks;
-    }
-
-    private void setListProjects(List<Project> projects) {
-        this.allProjects = projects;
     }
 
     /**
@@ -208,7 +160,6 @@ public class MainActivity extends AppCompatActivity implements TasksAdapter.Dele
      */
     private void onPositiveButtonClick(DialogInterface dialogInterface) {
         // If dialog is open
-
         if (binder.txtTaskName != null && binder.projectSpinner != null) {
             // Get the name of the task
             String taskName = binder.txtTaskName.getText().toString();
@@ -225,17 +176,12 @@ public class MainActivity extends AppCompatActivity implements TasksAdapter.Dele
             }
             // If both project and name of the task have been set
             else if (taskProject != null) {
-                //  Replace this by id of persisted task
-                //long id = (long) (Math.random() * 50000);
                 Task task = new Task(
-                        //id
-                        taskProject.getId(),
+                        taskProject.getProject_id(),
                         taskName,
                         new Date().getTime()
                 );
                 addTask(task);
-
-
                 dialogInterface.dismiss();
             }
             // If name has been set, but project has not been set (this should never occur)
@@ -254,12 +200,7 @@ public class MainActivity extends AppCompatActivity implements TasksAdapter.Dele
      */
     private void showAddTaskDialog() {
         final AlertDialog dialog = getAddTaskDialog();
-
         dialog.show();
-/**
- dialogEditText = dialog.findViewById(R.id.txt_task_name);
- dialogSpinner = dialog.findViewById(R.id.project_spinner);
- */
         populateDialogSpinner();
     }
 
@@ -270,8 +211,8 @@ public class MainActivity extends AppCompatActivity implements TasksAdapter.Dele
      */
     private void addTask(@NonNull Task task) {
         mTaskViewModel.createTask(task);
-        allTasks.add(task);
-        updateTasks(allTasks);
+        //allTasks.add(task);
+        //updateTasks(allTasks);
     }
 
     /**
@@ -286,7 +227,6 @@ public class MainActivity extends AppCompatActivity implements TasksAdapter.Dele
             binding.listTasks.setVisibility(View.VISIBLE);
             switch (sortMethod) {
                 case ALPHABETICAL:
-                    //Collections.sort(tasks, new Task.TaskAZComparator());
                     mTaskViewModel.getAllTasksFromAToZ().observe(this, new Observer<List<Task>>() {
                         @Override
                         public void onChanged(List<Task> tasks) {
@@ -295,7 +235,6 @@ public class MainActivity extends AppCompatActivity implements TasksAdapter.Dele
                     });
                     break;
                 case ALPHABETICAL_INVERTED:
-                    //Collections.sort(tasks, new Task.TaskZAComparator());
                     mTaskViewModel.getAllTasksFromZToA().observe(this, new Observer<List<Task>>() {
                         @Override
                         public void onChanged(List<Task> tasks) {
@@ -304,7 +243,6 @@ public class MainActivity extends AppCompatActivity implements TasksAdapter.Dele
                     });
                     break;
                 case RECENT_FIRST:
-                    //Collections.sort(tasks, new Task.TaskRecentComparator());
                     mTaskViewModel.getAllTasksFromRecentToOld().observe(this, new Observer<List<Task>>() {
                         @Override
                         public void onChanged(List<Task> tasks) {
@@ -313,7 +251,6 @@ public class MainActivity extends AppCompatActivity implements TasksAdapter.Dele
                     });
                     break;
                 case OLD_FIRST:
-                    //Collections.sort(tasks, new Task.TaskOldComparator());
                     mTaskViewModel.getAllTasksFromOldToRecent().observe(this, new Observer<List<Task>>() {
                         @Override
                         public void onChanged(List<Task> tasks) {
@@ -326,7 +263,6 @@ public class MainActivity extends AppCompatActivity implements TasksAdapter.Dele
             adapter.notifyDataSetChanged();
         }
     }
-
     /**
      * Returns the dialog allowing the user to create a new task.
      *
@@ -343,11 +279,7 @@ public class MainActivity extends AppCompatActivity implements TasksAdapter.Dele
         alertBuilder.setPositiveButton(R.string.add, null);
         alertBuilder.setOnDismissListener(new DialogInterface.OnDismissListener() {
             @Override
-            public void onDismiss(DialogInterface dialogInterface) {
-                /**   binder.txtTaskName = null;
-                 binder.projectSpinner  = null;
-                 dialog = null;*/
-            }
+            public void onDismiss(DialogInterface dialogInterface) {            }
         });
 
         dialog = alertBuilder.create();

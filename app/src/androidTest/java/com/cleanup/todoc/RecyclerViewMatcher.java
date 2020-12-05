@@ -1,8 +1,9 @@
 package com.cleanup.todoc;
 
 import android.content.res.Resources;
-import android.support.v7.widget.RecyclerView;
 import android.view.View;
+
+import androidx.recyclerview.widget.RecyclerView;
 
 import org.hamcrest.Description;
 import org.hamcrest.Matcher;
@@ -53,11 +54,24 @@ public class RecyclerViewMatcher {
                     RecyclerView recyclerView =
                             view.getRootView().findViewById(recyclerViewId);
                     if (recyclerView != null && recyclerView.getId() == recyclerViewId) {
-                        childView = recyclerView.findViewHolderForAdapterPosition(position).itemView;
+                        if (recyclerView.findViewHolderForAdapterPosition(position) != null) {
+                            childView = recyclerView.findViewHolderForAdapterPosition(position).itemView;
+                        }
                     } else {
                         return false;
                     }
                 }
+
+
+                if (targetViewId == -1) {
+                    return view == childView;
+                } else if (childView != null){
+                    View targetView = childView.findViewById(targetViewId);
+                    return view == targetView;
+                } else {
+                    return false;
+                }
+                /**
 
                 if (targetViewId == -1) {
                     return view == childView;
@@ -65,6 +79,7 @@ public class RecyclerViewMatcher {
                     View targetView = childView.findViewById(targetViewId);
                     return view == targetView;
                 }
+                 */
 
             }
         };
