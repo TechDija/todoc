@@ -7,8 +7,6 @@ import androidx.room.Insert;
 import androidx.room.Query;
 import androidx.room.Update;
 
-import com.cleanup.todoc.model.Task;
-
 import java.util.List;
 
 @Dao

@@ -7,6 +7,7 @@ import androidx.room.Room;
 import androidx.test.core.app.ApplicationProvider;
 import androidx.test.runner.AndroidJUnit4;
 
+import com.cleanup.todoc.androidTestUtils.LiveDataTestUtil;
 import com.cleanup.todoc.model.Database;
 import com.cleanup.todoc.model.Project;
 import com.cleanup.todoc.model.ProjectDao;
@@ -19,7 +20,6 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
-import java.io.IOException;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.List;
@@ -51,42 +51,43 @@ public class TaskDaoTest {
     }
 
     @After
-    public void closeDatabase() throws IOException {
+    public void closeDatabase() {
         db.close();
     }
 
     @Test
     public void insertAndGetTask() throws Exception {
-        //inserting data
+        //given
         this.mProjectDao.createProject(DEMO_PROJECT);
         this.mTaskDao.insertTask(DEMO_TASK);
-        //observing the changes in LiveData values
+        //then
         List<Task> tasks = LiveDataTestUtil.getValue(this.mTaskDao.getAllTasks());
-        //running the test
         assertEquals(tasks.size(), 1);
     }
 
     @Test
     public void insertAndDeleteTask() throws Exception {
+        //given
         this.mProjectDao.createProject(DEMO_PROJECT);
         this.mTaskDao.insertTask(DEMO_TASK);
-
+        //when
         Task addedTask = LiveDataTestUtil.getValue(this.db.taskDao().getAllTasks()).get(0);
         this.db.taskDao().deleteTask(addedTask);
-
+        // then
         List<Task> tasks = LiveDataTestUtil.getValue(this.db.taskDao().getAllTasks());
         assertTrue(tasks.isEmpty());
     }
 
     @Test
     public void insertAndUpdateTask() throws Exception {
+        //given
         this.mProjectDao.createProject(DEMO_PROJECT);
         this.mTaskDao.insertTask(DEMO_TASK);
-
+        //when
         Task taskToUpdate = LiveDataTestUtil.getValue(this.mTaskDao.getAllTasks()).get(0);
         taskToUpdate.setName("testChore");
         this.mTaskDao.updateTask(taskToUpdate);
-
+        //then
         List<Task> tasks = LiveDataTestUtil.getValue(this.mTaskDao.getAllTasks());
         assertTrue(tasks.size() == 1  && tasks.get(0).getName().equals("testChore"));
 
@@ -94,7 +95,9 @@ public class TaskDaoTest {
 
     @Test
     public void getTasks_whenTasksAreEmpty() throws InterruptedException {
+        //when
         List<Task> tasks = LiveDataTestUtil.getValue(this.db.taskDao().getAllTasks());
+        //then
         assertTrue(tasks.isEmpty());
 
     }

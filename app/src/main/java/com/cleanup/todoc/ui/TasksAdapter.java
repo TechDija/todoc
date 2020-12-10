@@ -67,7 +67,7 @@ public class TasksAdapter extends RecyclerView.Adapter<TasksAdapter.TaskViewHold
 
     @Override
     public int getItemCount() {
-            return this.tasks.size();
+        return this.tasks.size();
     }
 
     /**
@@ -88,7 +88,7 @@ public class TasksAdapter extends RecyclerView.Adapter<TasksAdapter.TaskViewHold
      * @author Gaëtan HERFRAY
      */
     static class TaskViewHolder extends RecyclerView.ViewHolder {
-        private ItemTaskBinding mBinding;
+        private final ItemTaskBinding mBinding;
 
         /**
          * The listener for when a task needs to be deleted
@@ -97,10 +97,11 @@ public class TasksAdapter extends RecyclerView.Adapter<TasksAdapter.TaskViewHold
 
         /**
          * Instantiates a new TaskViewHolder.
-         *  @param mBinding           the view of the task item
+         *
+         * @param mBinding           the view of the task item
          * @param deleteTaskListener the listener for when a task needs to be deleted to set
          */
-        TaskViewHolder(@NonNull  ItemTaskBinding mBinding, @NonNull DeleteTaskListener deleteTaskListener) {
+        TaskViewHolder(@NonNull ItemTaskBinding mBinding, @NonNull DeleteTaskListener deleteTaskListener) {
             super(mBinding.getRoot());
             this.mBinding = mBinding;
             this.deleteTaskListener = deleteTaskListener;
@@ -134,5 +135,3 @@ public class TasksAdapter extends RecyclerView.Adapter<TasksAdapter.TaskViewHold
         }
     }
 }
-
-

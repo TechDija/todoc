@@ -1,4 +1,4 @@
-package com.cleanup.todoc;
+package com.cleanup.todoc.testUtils;
 
 import androidx.annotation.Nullable;
 import androidx.lifecycle.LiveData;

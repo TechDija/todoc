@@ -8,12 +8,12 @@ android {
         targetSdkVersion 29
         versionCode 1
         versionName "1.0"
-        //testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
 
     }
     buildTypes {
         release {
+            // to obfuscate enable minify
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
@@ -52,14 +52,13 @@ dependencies {
     //LIFECYCLE (Viewmodel & Livedata)
     def lifecycle_version = "2.2.0"
     def arch_version = "2.1.0"
+    //noinspection GradleDependency
     implementation "androidx.lifecycle:lifecycle-viewmodel:$lifecycle_version"
     implementation "androidx.lifecycle:lifecycle-livedata:$lifecycle_version"
     implementation "androidx.lifecycle:lifecycle-common-java8:$lifecycle_version"
     //Test helpers for LiveData
     androidTestImplementation "androidx.arch.core:core-testing:$arch_version"
     testImplementation "androidx.arch.core:core-testing:$arch_version"
-
-
 
 
 }

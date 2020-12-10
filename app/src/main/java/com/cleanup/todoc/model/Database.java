@@ -8,7 +8,7 @@ import androidx.room.Room;
 import androidx.room.RoomDatabase;
 import androidx.sqlite.db.SupportSQLiteDatabase;
 
-@androidx.room.Database(entities = {Task.class, Project.class}, version = 2)
+@androidx.room.Database(entities = {Task.class, Project.class}, version = 6)
 public abstract class Database extends RoomDatabase {
 
     // -------SINGLETON--------
@@ -34,15 +34,10 @@ public abstract class Database extends RoomDatabase {
         }
         return INSTANCE;
     }
+
     //-----------Callback----------
     private static Callback populateDatabase() {
         return new Callback() {
-           /** @Override
-            public void onOpen(@NonNull SupportSQLiteDatabase db) {
-                super.onOpen(db);
-                new PopulateDatabaseAsyncTask(INSTANCE).execute();
-            }*/
-
             @Override
             public void onCreate(@NonNull SupportSQLiteDatabase db) {
                 super.onCreate(db);
@@ -50,6 +45,7 @@ public abstract class Database extends RoomDatabase {
             }
         };
     }
+
     private static class PopulateDatabaseAsyncTask extends AsyncTask<Void, Void, Void> {
         private final ProjectDao projectDao;
 

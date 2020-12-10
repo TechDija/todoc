@@ -45,7 +45,7 @@ public class MainActivity extends AppCompatActivity implements TasksAdapter.Dele
     /**
      * List of all projects available in the application
      */
-    private Project[] allProjects = Project.getAllProjects();
+    private final Project[] allProjects = Project.getAllProjects();
 
     /**
      * List of all current tasks of the application
@@ -70,7 +70,7 @@ public class MainActivity extends AppCompatActivity implements TasksAdapter.Dele
     @Nullable
     public AlertDialog dialog = null;
 
-     /**
+    /**
      * The Viewmodel
      */
     private TaskViewModel mTaskViewModel;
@@ -160,7 +160,7 @@ public class MainActivity extends AppCompatActivity implements TasksAdapter.Dele
      */
     private void onPositiveButtonClick(DialogInterface dialogInterface) {
         // If dialog is open
-        if (binder.txtTaskName != null && binder.projectSpinner != null) {
+        if (binder.projectSpinner != null) {
             // Get the name of the task
             String taskName = binder.txtTaskName.getText().toString();
 
@@ -211,8 +211,6 @@ public class MainActivity extends AppCompatActivity implements TasksAdapter.Dele
      */
     private void addTask(@NonNull Task task) {
         mTaskViewModel.createTask(task);
-        //allTasks.add(task);
-        //updateTasks(allTasks);
     }
 
     /**
@@ -263,6 +261,7 @@ public class MainActivity extends AppCompatActivity implements TasksAdapter.Dele
             adapter.notifyDataSetChanged();
         }
     }
+
     /**
      * Returns the dialog allowing the user to create a new task.
      *
@@ -279,7 +278,8 @@ public class MainActivity extends AppCompatActivity implements TasksAdapter.Dele
         alertBuilder.setPositiveButton(R.string.add, null);
         alertBuilder.setOnDismissListener(new DialogInterface.OnDismissListener() {
             @Override
-            public void onDismiss(DialogInterface dialogInterface) {            }
+            public void onDismiss(DialogInterface dialogInterface) {
+            }
         });
 
         dialog = alertBuilder.create();

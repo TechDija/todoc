@@ -8,11 +8,14 @@ import androidx.test.espresso.contrib.RecyclerViewActions;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 import androidx.test.rule.ActivityTestRule;
 
+import com.cleanup.todoc.androidTestUtils.DeleteViewAction;
 import com.cleanup.todoc.ui.MainActivity;
 
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+
+import java.util.Objects;
 
 import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.action.ViewActions.click;
@@ -21,7 +24,7 @@ import static androidx.test.espresso.assertion.ViewAssertions.matches;
 import static androidx.test.espresso.matcher.ViewMatchers.assertThat;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
-import static com.cleanup.todoc.TestUtils.withRecyclerView;
+import static com.cleanup.todoc.androidTestUtils.TestUtils.withRecyclerView;
 import static org.hamcrest.Matchers.equalTo;
 
 /**
@@ -59,7 +62,7 @@ public class MainActivityInstrumentedTest {
         // Check that recyclerView is displayed
         assertThat(listTasks.getVisibility(), equalTo(View.VISIBLE));
         // Check that it contains one element
-        assertThat(listTasks.getAdapter().getItemCount(), equalTo(1));
+        assertThat(Objects.requireNonNull(listTasks.getAdapter()).getItemCount(), equalTo(1));
 
         onView(withRecyclerView(R.id.list_tasks).atPositionOnView(0, R.id.img_delete))
                 .perform(click());
@@ -91,9 +94,9 @@ public class MainActivityInstrumentedTest {
         onView(withId(R.id.fab_add_task)).perform(click());
         onView(withId(R.id.txt_task_name)).perform(replaceText("hhh Tâche example"));
         onView(withId(android.R.id.button1)).perform(click());
-
+        Thread.sleep(500);
         // Sort
-        int count = getRecyclerViewCount();
+
         onView(withId(R.id.action_filter)).perform(click());
         onView(withText(R.string.sort_alphabetical)).perform(click());
         Thread.sleep(500);
@@ -128,7 +131,7 @@ public class MainActivityInstrumentedTest {
         onView(withId(R.id.fab_add_task)).perform(click());
         onView(withId(R.id.txt_task_name)).perform(replaceText("hhh Tâche example"));
         onView(withId(android.R.id.button1)).perform(click());
-
+        Thread.sleep(500);
         // Sort alphabetical inverted
         onView(withId(R.id.action_filter)).perform(click());
         onView(withText(R.string.sort_alphabetical_invert)).perform(click());
@@ -163,7 +166,7 @@ public class MainActivityInstrumentedTest {
         onView(withId(R.id.fab_add_task)).perform(click());
         onView(withId(R.id.txt_task_name)).perform(replaceText("hhh Tâche example"));
         onView(withId(android.R.id.button1)).perform(click());
-
+        Thread.sleep(500);
         // Sort old first
         onView(withId(R.id.action_filter)).perform(click());
         onView(withText(R.string.sort_oldest_first)).perform(click());
@@ -198,7 +201,7 @@ public class MainActivityInstrumentedTest {
         onView(withId(R.id.fab_add_task)).perform(click());
         onView(withId(R.id.txt_task_name)).perform(replaceText("hhh Tâche example"));
         onView(withId(android.R.id.button1)).perform(click());
-
+        Thread.sleep(500);
         // Sort recent first
         onView(withId(R.id.action_filter)).perform(click());
         onView(withText(R.string.sort_recent_first)).perform(click());
@@ -216,10 +219,9 @@ public class MainActivityInstrumentedTest {
         MainActivity activity = rule.getActivity();
         RecyclerView listTasks = activity.findViewById(R.id.list_tasks);
         if (listTasks != null) {
-            return listTasks.getAdapter().getItemCount();
+            return Objects.requireNonNull(listTasks.getAdapter()).getItemCount();
         } else {
             return 0;
         }
     }
 }
-
