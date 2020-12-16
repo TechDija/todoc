@@ -68,8 +68,9 @@ public class TaskViewModelTest {
         when(repository.getAllTasks()).thenReturn(liveDataTasks);
         Observer observer = mock(Observer.class);
         viewModel.getAllTasks().observeForever(observer);
-        //then
+        //when
         List<Task> actual = LiveDataTestUtil.getValue(this.viewModel.getAllTasks());
+        //then
         assertEquals(tasks, actual);
     }
 
@@ -108,8 +109,4 @@ public class TaskViewModelTest {
         //then
         verify(repository).deleteTask(task);
     }
-
-
 }
-
-
